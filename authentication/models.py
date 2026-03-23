@@ -42,7 +42,7 @@ class UserManager(BaseUserManager):
     
 class User(AbstractBaseUser, PermissionsMixin):
     
-    username = models.CharField(db_index=True, max_length=255, uniaue=True)
+    username = models.CharField(db_index=True, max_length=255, unique=True)
 
     email = models.EmailField(db_index=True, unique=True)
     # "Мягкое" удаление - учетная запись пользователя деактивируется
@@ -97,10 +97,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
         token = jwt.encode({
             'id' : self.pk,
-            'exp' : int(dt.strftime('%s'))
+            'exp' : int(dt.timestamp())
         }, settings.SECRET_KEY, algorithm='HS256')
 
-        return token.decode('utf-8')
+        return token
 
 
 
